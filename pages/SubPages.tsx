@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Page } from '../types';
 
@@ -134,9 +135,28 @@ export const ServicesPage: React.FC<SubPageProps> = ({ onNavigate }) => {
 export const AboutPage: React.FC<SubPageProps> = () => {
   const [isSeminarModalOpen, setIsSeminarModalOpen] = useState(false);
 
-  const handleSeminarSubmit = (e: React.FormEvent) => {
+  const handleSeminarSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('세미나 신청이 완료되었습니다. 담당자가 곧 연락드리겠습니다.');
+    const formData = new FormData(e.currentTarget);
+    const attendees = formData.get('attendees');
+    const location = formData.get('location');
+    const name = formData.get('name');
+    const contact = formData.get('contact');
+
+    const subject = `[세미나 후원 신청] ${name}`;
+    const body = `
+[세미나/후원 신청]
+
+1. 참석 인원: ${attendees}명
+2. 모임 장소(지역): ${location}
+3. 신청자명(병원): ${name}
+4. 연락처: ${contact}
+    `.trim();
+
+    const mailtoLink = `mailto:pytkorea@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+
+    alert('이메일 발송 화면으로 이동합니다. 내용을 확인 후 전송 버튼을 눌러주세요.');
     setIsSeminarModalOpen(false);
   };
 
@@ -264,19 +284,19 @@ export const AboutPage: React.FC<SubPageProps> = () => {
             <form onSubmit={handleSeminarSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">참석 인원 수</label>
-                <input required type="number" min="1" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="예: 5명" />
+                <input name="attendees" required type="number" min="1" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="예: 5명" />
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">모임 장소(지역)</label>
-                <input required type="text" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="예: 서울 강남구 청담동" />
+                <input name="location" required type="text" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="예: 서울 강남구 청담동" />
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">신청자명(병원)</label>
-                <input required type="text" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="예: 김원장 (강남피부과)" />
+                <input name="name" required type="text" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="예: 김원장 (강남피부과)" />
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">연락처 번호(HP)</label>
-                <input required type="tel" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="010-1234-5678" />
+                <input name="contact" required type="tel" className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" placeholder="010-1234-5678" />
               </div>
               <div className="pt-4 flex gap-3">
                 <button type="button" onClick={() => setIsSeminarModalOpen(false)} className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-50">
@@ -296,6 +316,30 @@ export const AboutPage: React.FC<SubPageProps> = () => {
 
 // --- SUB 4: Contact ---
 export const ContactPage: React.FC<SubPageProps> = () => {
+  const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name');
+    const contact = formData.get('contact');
+    const interest = formData.get('interest');
+    const message = formData.get('message');
+
+    const subject = `[무료 진단 신청] ${name}`;
+    const body = `
+[무료 진단 컨설팅 신청]
+
+1. 이름: ${name}
+2. 연락처: ${contact}
+3. 관심 분야: ${interest}
+4. 문의 내용:
+${message}
+    `.trim();
+
+    const mailtoLink = `mailto:pytkorea@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+    alert('이메일 발송 화면으로 이동합니다. 내용을 확인 후 전송 버튼을 눌러주세요.');
+  };
+
   return (
     <div className="pt-24 pb-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -310,18 +354,18 @@ export const ContactPage: React.FC<SubPageProps> = () => {
           {/* Contact Form */}
           <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
             <h3 className="text-2xl font-bold text-primary mb-6">무료 진단 신청</h3>
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4" onSubmit={handleContactSubmit}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
-                <input type="text" className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary focus:ring-1 focus:ring-secondary outline-none" placeholder="홍길동" />
+                <input name="name" required type="text" className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary focus:ring-1 focus:ring-secondary outline-none" placeholder="홍길동" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">연락처</label>
-                <input type="tel" className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary focus:ring-1 focus:ring-secondary outline-none" placeholder="010-0000-0000" />
+                <input name="contact" required type="tel" className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary focus:ring-1 focus:ring-secondary outline-none" placeholder="010-0000-0000" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">관심 분야</label>
-                <select className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary outline-none">
+                <select name="interest" className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary outline-none">
                   <option>절세 컨설팅</option>
                   <option>해외 달러 투자</option>
                   <option>부동산 진입 전략</option>
@@ -330,9 +374,9 @@ export const ContactPage: React.FC<SubPageProps> = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">문의 내용</label>
-                <textarea rows={4} className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary focus:ring-1 focus:ring-secondary outline-none" placeholder="현재 상황과 고민을 간단히 적어주세요."></textarea>
+                <textarea name="message" required rows={4} className="w-full border border-gray-300 px-4 py-2 rounded-md focus:border-secondary focus:ring-1 focus:ring-secondary outline-none" placeholder="현재 상황과 고민을 간단히 적어주세요."></textarea>
               </div>
-              <button className="w-full bg-primary text-white py-3 font-bold rounded-md hover:bg-gray-800 transition-colors">
+              <button type="submit" className="w-full bg-primary text-white py-3 font-bold rounded-md hover:bg-gray-800 transition-colors">
                 신청하기
               </button>
             </form>

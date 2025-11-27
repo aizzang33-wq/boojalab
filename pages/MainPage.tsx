@@ -16,13 +16,37 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!agreedToPrivacy) {
       alert("개인정보 수집 및 이용에 동의해야 신청이 가능합니다.");
       return;
     }
-    alert("병원장 세미나 후원 신청이 접수되었습니다. 담당자가 곧 연락드리겠습니다.");
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name');
+    const contact = formData.get('contact');
+    const attendees = formData.get('attendees');
+    const location = formData.get('location');
+
+    const subject = `[세미나 후원 신청] ${name}`;
+    const body = `
+[병원장 세미나 후원 신청]
+
+1. 이름(병원명): ${name}
+2. 연락처: ${contact}
+3. 참석 인원 수: ${attendees}명
+4. 장소(지역): ${location}
+
+* 개인정보 수집 및 이용에 동의함
+    `.trim();
+
+    const mailtoLink = `mailto:pytkorea@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    // Open email client
+    window.location.href = mailtoLink;
+
+    alert("이메일 발송 화면으로 이동합니다. 내용을 확인 후 전송 버튼을 눌러주세요.");
     setIsModalOpen(false);
     setAgreedToPrivacy(false);
   };
@@ -200,6 +224,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate }) => {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">이름 (병원명)</label>
                 <input 
+                  name="name"
                   required 
                   type="text" 
                   className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" 
@@ -209,6 +234,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate }) => {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">연락처</label>
                 <input 
+                  name="contact"
                   required 
                   type="tel" 
                   className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" 
@@ -218,6 +244,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate }) => {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">세미나 참석 인원 수</label>
                 <input 
+                  name="attendees"
                   required 
                   type="number" 
                   min="1" 
@@ -228,6 +255,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate }) => {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">장소 (지역)</label>
                 <input 
+                  name="location"
                   required 
                   type="text" 
                   className="w-full border border-gray-300 px-3 py-2 rounded focus:border-secondary outline-none" 
