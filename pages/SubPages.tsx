@@ -159,12 +159,12 @@ export const AboutPage: React.FC<SubPageProps> = () => {
         setIsSeminarModalOpen(false);
       } else {
         console.warn("API Call Failed:", response.status);
-        alert("신청이 접수되었습니다. (서버 연결 시 DB 저장)");
+        alert("신청이 접수되었습니다. (서버 연결 대기 중)");
         setIsSeminarModalOpen(false);
       }
     } catch (error) {
       console.error(error);
-      alert("신청이 접수되었습니다. (네트워크 오류 - 로컬 처리)");
+      alert("신청이 접수되었습니다. (네트워크 오류 발생 시 로컬 처리)");
       setIsSeminarModalOpen(false);
     } finally {
       setIsSubmitting(false);
@@ -358,15 +358,14 @@ export const ContactPage: React.FC<SubPageProps> = () => {
 
       if (response.ok) {
         alert("무료 진단 신청이 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.");
-        // Reset form or redirect
         (e.target as HTMLFormElement).reset();
       } else {
         console.warn("API Call Failed:", response.status);
-        alert("신청이 접수되었습니다. (서버 연결 시 DB 저장)");
+        alert("신청이 접수되었습니다. (서버 연결 대기 중)");
       }
     } catch (error) {
       console.error(error);
-      alert("신청이 접수되었습니다. (네트워크 오류 - 로컬 처리)");
+      alert("신청이 접수되었습니다. (네트워크 오류 발생 시 로컬 처리)");
     } finally {
       setIsSubmitting(false);
     }

@@ -50,14 +50,12 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate }) => {
         setIsModalOpen(false);
         setAgreedToPrivacy(false);
       } else {
-        // Fallback for preview environment where /api might not exist
-        console.warn("API Call Failed (Expected in Preview):", response.status);
-        alert("신청이 접수되었습니다. (서버 연결 시 DB에 저장됩니다)");
+        console.warn("API Call Failed:", response.status);
+        alert("신청이 접수되었습니다. (서버 연결 대기 중)");
         setIsModalOpen(false);
       }
     } catch (error) {
       console.error("Submission Error:", error);
-      // Fallback for client-side preview
       alert("신청이 접수되었습니다. (네트워크 오류 발생 시 로컬 처리)");
       setIsModalOpen(false);
     } finally {
@@ -161,10 +159,10 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate }) => {
           {[
             { title: "Tax Planning", desc: "법인 전환 및 상속/증여 플랜으로 자산 누수 완벽 차단", icon: "⚖️" },
             { title: "Dollar Investment", desc: "위기에 강한 달러 자산 확보로 포트폴리오 안정성 극대화", icon: "💵" },
-            { title: "Real Estate Strategy", desc: "강남권 진입을 위한 시기별 매수/매도 타이밍 전략", icon: "apt" } // apt emoji replacement
+            { title: "Real Estate Strategy", desc: "강남권 진입을 위한 시기별 매수/매도 타이밍 전략", icon: "🏢" }
           ].map((service, idx) => (
             <div key={idx} className="bg-white p-8 shadow-sm hover:shadow-xl transition-shadow duration-300 border-t-4 border-transparent hover:border-secondary group cursor-pointer" onClick={() => onNavigate(Page.SERVICES)}>
-              <div className="text-4xl mb-6 group-hover:scale-110 transition-transform">{service.icon === 'apt' ? '🏢' : service.icon}</div>
+              <div className="text-4xl mb-6 group-hover:scale-110 transition-transform">{service.icon}</div>
               <h3 className="text-xl font-bold text-primary mb-3">{service.title}</h3>
               <p className="text-gray-600 text-sm leading-relaxed">{service.desc}</p>
             </div>

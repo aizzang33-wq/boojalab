@@ -1,9 +1,6 @@
 
-// Vercel Serverless Function Example
-// This file usually resides in the '/api' directory in a Vercel project.
-
 export default async function handler(req: any, res: any) {
-  // CORS configuration (Optional, depending on deployment)
+  // CORS configuration
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -26,26 +23,20 @@ export default async function handler(req: any, res: any) {
 
     // ---------------------------------------------------------
     // [Database Logic Placeholder]
-    // 여기에 실제 데이터베이스 저장 로직을 구현합니다.
-    // 예: MongoDB, PostgreSQL, Supabase, Firebase 등 연결
-    //
-    // const db = await connectToDatabase();
-    // await db.collection('applications').insertOne({
-    //   type,      // 'SEMINAR_SPONSORSHIP' | 'CONSULTATION'
-    //   ...data,   // 사용자 입력 데이터
-    //   createdAt: new Date(),
-    // });
+    // 실제 배포 시 이곳에 DB 저장 로직을 구현합니다.
+    // 예: Vercel Postgres, Supabase, MongoDB 등
     // ---------------------------------------------------------
 
-    console.log(`[Serverless Function] Received submission type: ${type}`);
-    console.log(`[Serverless Function] Data:`, data);
+    console.log(`[Serverless Function] New Submission Received:`);
+    console.log(`Type: ${type}`);
+    console.log(`Data:`, JSON.stringify(data, null, 2));
 
     // Simulate processing delay
     // await new Promise(resolve => setTimeout(resolve, 500));
 
     return res.status(200).json({ 
       success: true, 
-      message: 'Application received and saved successfully.' 
+      message: 'Data received and logged successfully.' 
     });
 
   } catch (error) {
